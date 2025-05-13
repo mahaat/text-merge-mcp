@@ -1,8 +1,10 @@
 package id.mahaat.mustachetool;
 
 import id.mahaat.mustachetool.service.MustacheService;
+import io.quarkiverse.mcp.server.TextContent;
 import io.quarkiverse.mcp.server.Tool;
 import io.quarkiverse.mcp.server.ToolArg;
+import io.quarkiverse.mcp.server.ToolResponse;
 import jakarta.inject.Inject;
 
 import java.util.List;
@@ -14,14 +16,29 @@ public class TextMergeTools {
     private MustacheService mustacheService;
 
     @Tool(description = "Merge text with parameters")
-    String mergeText(@ToolArg(description = "Mustache formatted text template") String template,
-                     @ToolArg(description = "Parameters of the text and its values") Map<String, Object> parameters) {
-        return mustacheService.compute(template, parameters);
+    ToolResponse mergeText(@ToolArg(description = "Mustache formatted text template") String template,
+                           @ToolArg(description = "Parameters of the text and its values") Map<String, Object> parameters) {
+        try {
+            var result = mustacheService.compute(template, parameters);
+            return ToolResponse.success(result);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return ToolResponse.error("Failed to merge");
+        }
     }
 
     @Tool(description = "Merge text with multiple group of parameters")
-    List<String> mergeTextMultipleParameters(@ToolArg(description = "Mustache formatted text template") String template,
+    ToolResponse mergeTextMultipleParameters(@ToolArg(description = "Mustache formatted text template") String template,
                                              @ToolArg(description = "List of parameters group of the text and its values") List<Map<String, Object>> parameters) {
-        return mustacheService.computeList(template, parameters);
+
+
+        try {
+            var result = mustacheService.computeList(template, parameters);
+            List<TextContent> contents = result.stream().map(TextContent::new).toList();
+            return ToolResponse.success(contents);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return ToolResponse.error("Failed to merge");
+        }
     }
 }
