@@ -8,4 +8,6 @@ public interface MustacheService {
     String compute(String template, Map<String, Object> parameters);
 
     List<String> computeList(String template, List<Map<String, Object>> parameters);
+
+    List<String> getVariableNames(String template);
 }

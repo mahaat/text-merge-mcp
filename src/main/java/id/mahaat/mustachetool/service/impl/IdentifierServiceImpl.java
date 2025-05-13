@@ -4,7 +4,7 @@ import id.mahaat.mustachetool.service.IdentifierService;
 import jakarta.inject.Singleton;
 import org.sqids.Sqids;
 
-import java.util.Arrays;
+import java.util.List;
 
 @Singleton
 public class IdentifierServiceImpl implements IdentifierService {
@@ -12,6 +12,6 @@ public class IdentifierServiceImpl implements IdentifierService {
 
     @Override
     public String generateShortId() {
-        return sqids.encode(Arrays.asList(System.currentTimeMillis()));
+        return sqids.encode(List.of(System.currentTimeMillis()));
     }
 }

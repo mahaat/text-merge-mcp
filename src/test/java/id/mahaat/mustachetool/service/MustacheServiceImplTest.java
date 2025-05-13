@@ -41,4 +41,11 @@ class MustacheServiceImplTest {
         assertEquals("Hi Budi", result.get(2));
 
     }
+
+    @Test
+    void givenTemplate_whenGetVariableNames_thenReturnVariables(){
+        var result = mustacheService.getVariableNames("Hi {{name}} . I am from {{nation}}");
+        assertEquals("name", result.get(0));
+        assertEquals("nation", result.get(1));
+    }
 }

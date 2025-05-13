@@ -1,8 +1,10 @@
 package id.mahaat.mustachetool.service.impl;
 
+import com.github.mustachejava.Code;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
+import com.github.mustachejava.codes.ValueCode;
 import id.mahaat.mustachetool.service.IdentifierService;
 import id.mahaat.mustachetool.service.MustacheService;
 import jakarta.inject.Inject;
@@ -41,6 +43,20 @@ public class MustacheServiceImpl implements MustacheService {
             results.add(writer.toString());
         }
 
+        return results;
+    }
+
+    @Override
+    public List<String> getVariableNames(String template) {
+        MustacheFactory mf = new DefaultMustacheFactory();
+        Mustache mustache = mf.compile(new StringReader(template), identifierService.generateShortId());
+        var codes = mustache.getCodes();
+        List<String> results = new ArrayList<>();
+        for (Code code : codes) {
+            if (code instanceof ValueCode) {
+                results.add(code.getName());
+            }
+        }
         return results;
     }
 }
